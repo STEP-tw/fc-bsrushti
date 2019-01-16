@@ -6,12 +6,12 @@ const app = (req, res) => {
   }
   fs.readFile("./src" + req.url, function(err, contents) {
     if (err) {
+      sendNotFound(req, res);
       return;
     }
     res.write(contents);
     res.end();
   });
-  sendNotFound(req, res);
 };
 
 const sendNotFound = (req, res) => {
