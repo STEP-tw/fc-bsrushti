@@ -1,7 +1,6 @@
 {
   "name": "flower_catalog",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "directories": {
     "test": "test"
@@ -10,6 +9,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "bsrushti",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STEP-tw/fc-bsrushti.git"
+  },
+  "bugs": {
+    "url": "https://github.com/STEP-tw/fc-bsrushti/issues"
+  },
+  "homepage": "https://github.com/STEP-tw/fc-bsrushti#readme",
+  "description": ""
 }
