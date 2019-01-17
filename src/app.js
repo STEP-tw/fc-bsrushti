@@ -1,10 +1,8 @@
 const fs = require("fs");
 
 const app = (req, res) => {
-  if (req.url == "/") {
-    req.url = "/index.html";
-  }
-  fs.readFile("./src" + req.url, function(err, contents) {
+  if (req.url == "/") req.url = "/index.html";
+  fs.readFile("./public" + req.url, function(err, contents) {
     if (err) {
       sendNotFound(req, res);
       return;
