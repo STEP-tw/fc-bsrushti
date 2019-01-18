@@ -1,10 +1,30 @@
-.header {
-  font-size: 40px;
-  color: orange;
+.fc {
   margin: 20px;
   text-align: right;
 }
 
+.guestBook,
+.fc {
+  color: orange;
+  font-size: 40px;
+}
+
+.guestBook {
+  text-align: center;
+}
+
 #jar {
   margin-left: 70px;
+}
+
+table {
+  padding: 12px;
+}
+
+td {
+  padding-top: 12px;
+}
+
+.submit {
+  font-size: 20px;
 }

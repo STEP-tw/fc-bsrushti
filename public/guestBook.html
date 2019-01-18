@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Guest Book</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="./css/main.css"
+    />
+  </head>
+  <body>
+    <form action="/log" method="POST">
+      <header class="guestBook"><a href="./index.html"><<</a>Guest Book</header>
+      <section>
+        <h1>Leave a comment</h1>
+        <table>
+          <tbody>
+            <tr>
+              <td><label>Name :</label></td>
+              <td><input type="text" name="name" /></td>
+            </tr>
+            <tr>
+              <td><label>Comment :</label></td>
+              <td><textarea rows="4" cols="50" name="comment"></textarea></td>
+            </tr>
+            <tr>
+              <td colspan="2"><button>submit</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </form>
+  </body>
+</html>
