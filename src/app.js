@@ -25,7 +25,6 @@ const readBody = (req, res, next) => {
   req.on("data", chunk => (content += chunk));
   req.on("end", () => {
     req.body = content;
-    console.log("readBody:", req.body);
     next();
   });
 };
@@ -41,7 +40,25 @@ const home = (req, res) => {
   readFile(req, res);
 };
 
+const parseData = text => {
+  let args = {};
+  const splitKeyValue = pair => pair.split("=");
+  const assignKeyValueToArgs = ([key, value]) => (args[key] = value);
+  text
+    .split("&")
+    .map(splitKeyValue)
+    .forEach(assignKeyValueToArgs);
+  console.log(args);
+  return args;
+};
+
 const guestBook = (req, res) => {
+  let data = parseData(req.body);
+  data.dateTime = new Date();
+  data = JSON.stringify(data);
+  fs.appendFile("./public/comments", data, err => {
+    if (err) throw err;
+  });
   sendResponse(res, req.body, 200);
 };
 
