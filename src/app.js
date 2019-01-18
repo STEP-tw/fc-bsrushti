@@ -53,13 +53,6 @@ const parseData = text => {
   return args;
 };
 
-const appendData = function(path, data) {
-  fs.appendFile(path, data, err => {
-    if (err) throw err;
-    return;
-  });
-};
-
 const formatComment = function(data) {
   let formattedData = "";
   formattedData += "Name:" + data.name + NEW_LINE;
@@ -68,19 +61,16 @@ const formatComment = function(data) {
   return formattedData + separator;
 };
 
+let comments = [];
+
 const guestBook = (req, res) => {
   let data = parseData(req.body);
-  data.dateTime = new Date();
-  data = formatComment(data);
-  let path = "./public/guestBook.html";
-  appendData(path, data);
-  fs.readFile(path, function(err, contents) {
-    if (err) {
-      sendResponse(res, "NOT FOUND", 404);
-      return;
-    }
-    res.write(contents);
-    res.end();
+  data.dateTime = new Date().toLocaleString();
+  comments.unshift(formatComment(data));
+  let formattedComments = comments.join("").replace(/\+/g, " ");
+  fs.readFile("./public/guestBook.html", (err, content) => {
+    content += formattedComments;
+    sendResponse(res, content, 200);
   });
 };
 
