@@ -1,6 +1,8 @@
 const fs = require("fs");
 const App = require("./frameWork");
 const app = new App();
+const NEW_LINE = "<br>";
+const separator = "<hr>";
 
 const readFile = (req, res) => {
   let fileName = req.url;
@@ -48,23 +50,43 @@ const parseData = text => {
     .split("&")
     .map(splitKeyValue)
     .forEach(assignKeyValueToArgs);
-  console.log(args);
   return args;
+};
+
+const appendData = function(path, data) {
+  fs.appendFile(path, data, err => {
+    if (err) throw err;
+    return;
+  });
+};
+
+const formatComment = function(data) {
+  let formattedData = "";
+  formattedData += "Name:" + data.name + NEW_LINE;
+  formattedData += "Comment:" + data.comment + NEW_LINE;
+  formattedData += "DateTime:" + data.dateTime + NEW_LINE;
+  return formattedData + separator;
 };
 
 const guestBook = (req, res) => {
   let data = parseData(req.body);
   data.dateTime = new Date();
-  data = JSON.stringify(data);
-  fs.appendFile("./public/comments", data, err => {
-    if (err) throw err;
+  data = formatComment(data);
+  let path = "./public/guestBook.html";
+  appendData(path, data);
+  fs.readFile(path, function(err, contents) {
+    if (err) {
+      sendResponse(res, "NOT FOUND", 404);
+      return;
+    }
+    res.write(contents);
+    res.end();
   });
-  sendResponse(res, req.body, 200);
 };
 
 app.use(readBody);
 app.use(logRequest);
-app.post("/log", guestBook);
+app.post("/guestBook.html", guestBook);
 app.use(home);
 
 // Export a function that can act as a handler
