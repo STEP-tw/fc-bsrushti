@@ -61,17 +61,34 @@ const formatComment = function(data) {
   return formattedData + separator;
 };
 
-let comments = [];
+const handleComments = function(req, res, comments, data) {
+  let parsedComments = JSON.parse(comments);
+  parsedComments.unshift(data);
+  storeCommentsToFile(JSON.stringify(parsedComments));
+  appendToGuestBook(req, res, parsedComments.map(formattedComments).join(""));
+};
+
+const formattedComments = comment => {
+  return formatComment(comment).replace(/\+/g, " ");
+};
 
 const guestBook = (req, res) => {
   let data = parseData(req.body);
   data.dateTime = new Date().toLocaleString();
-  comments.unshift(formatComment(data));
-  let formattedComments = comments.join("").replace(/\+/g, " ");
+  fs.readFile("./public/comments.json", (err, comments) => {
+    handleComments(req, res, comments, data);
+  });
+};
+
+const appendToGuestBook = function(req, res, commentLog) {
   fs.readFile("./public/guestBook.html", (err, content) => {
-    content += formattedComments;
+    content += commentLog;
     sendResponse(res, content, 200);
   });
+};
+
+const storeCommentsToFile = function(comment) {
+  fs.writeFile("./public/comments.json", comment, err => {});
 };
 
 app.use(readBody);
