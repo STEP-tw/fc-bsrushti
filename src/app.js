@@ -75,7 +75,7 @@ const formattedComments = comment => {
 const guestBook = (req, res) => {
   let data = parseData(req.body);
   data.dateTime = new Date().toLocaleString();
-  fs.readFile("./public/comments.json", (err, comments) => {
+  fs.readFile("./public/json/comments.json", (err, comments) => {
     handleComments(req, res, comments, data);
   });
 };
@@ -88,7 +88,7 @@ const appendToGuestBook = function(req, res, commentLog) {
 };
 
 const storeCommentsToFile = function(comment) {
-  fs.writeFile("./public/comments.json", comment, err => {});
+  fs.writeFile("./public/json/comments.json", comment, err => {});
 };
 
 app.use(readBody);
