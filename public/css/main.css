@@ -25,6 +25,10 @@ td {
   padding-top: 12px;
 }
 
+.header {
+  color: orange;
+  text-align: center;
+}
 .submit {
   font-size: 20px;
 }
