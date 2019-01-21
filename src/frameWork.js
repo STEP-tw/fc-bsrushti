@@ -18,12 +18,15 @@ class App {
   constructor() {
     this.routes = [];
   }
+
   use(handler) {
     this.routes.push({ handler });
   }
+
   post(url, handler) {
     this.routes.push({ method: "POST", url, handler });
   }
+  
   error(handler) {
     this.errorRoute = handler;
   }

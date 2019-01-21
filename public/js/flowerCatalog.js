@@ -3,3 +3,5 @@ const wait = function() {
   jar.visibility = "hidden";
   setTimeout(() => (jar.visibility = "visible"), 1000);
 };
+
+document.getElementById("jar").innerHTML.relo

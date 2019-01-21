@@ -1,8 +1,9 @@
-const fs = require("fs");
 const App = require("./frameWork");
+const fs = require("fs");
+const { sendResponse, parseData } = require("./utility");
+const { formattedComments } = require("./format");
+
 const app = new App();
-const NEW_LINE = "<br>";
-const separator = "<hr>";
 
 const readFile = (req, res) => {
   let fileName = req.url;
@@ -16,12 +17,6 @@ const readFile = (req, res) => {
   });
 };
 
-const sendResponse = function(res, content, status) {
-  res.statusCode = status;
-  res.write(content);
-  res.end();
-};
-
 const readBody = (req, res, next) => {
   let content = "";
   req.on("data", chunk => (content += chunk));
@@ -32,52 +27,9 @@ const readBody = (req, res, next) => {
 };
 
 const logRequest = (req, res, next) => {
-  console.log(req.method, req.url);
   console.log("headers =>", JSON.stringify(req.headers, null, 2));
   console.log("body =>", req.body);
   next();
-};
-
-const home = (req, res) => {
-  readFile(req, res);
-};
-
-const parseData = text => {
-  let args = {};
-  const splitKeyValue = pair => pair.split("=");
-  const assignKeyValueToArgs = ([key, value]) => (args[key] = value);
-  text
-    .split("&")
-    .map(splitKeyValue)
-    .forEach(assignKeyValueToArgs);
-  return args;
-};
-
-const formatComment = function(data) {
-  let formattedData = "";
-  formattedData += "Name:" + data.name + NEW_LINE;
-  formattedData += "Comment:" + data.comment + NEW_LINE;
-  formattedData += "DateTime:" + data.dateTime + NEW_LINE;
-  return formattedData + separator;
-};
-
-const handleComments = function(req, res, comments, data) {
-  let parsedComments = JSON.parse(comments);
-  parsedComments.unshift(data);
-  storeCommentsToFile(JSON.stringify(parsedComments));
-  appendToGuestBook(req, res, parsedComments.map(formattedComments).join(""));
-};
-
-const formattedComments = comment => {
-  return formatComment(comment).replace(/\+/g, " ");
-};
-
-const guestBook = (req, res) => {
-  let data = parseData(req.body);
-  data.dateTime = new Date().toLocaleString();
-  fs.readFile("./public/json/comments.json", (err, comments) => {
-    handleComments(req, res, comments, data);
-  });
 };
 
 const appendToGuestBook = function(req, res, commentLog) {
@@ -89,6 +41,25 @@ const appendToGuestBook = function(req, res, commentLog) {
 
 const storeCommentsToFile = function(comment) {
   fs.writeFile("./public/json/comments.json", comment, err => {});
+};
+
+const handleComments = function(req, res, comments, data) {
+  let parsedComments = JSON.parse(comments);
+  parsedComments.unshift(data);
+  storeCommentsToFile(JSON.stringify(parsedComments));
+  appendToGuestBook(req, res, parsedComments.map(formattedComments).join(""));
+};
+
+const home = (req, res) => {
+  readFile(req, res);
+};
+
+const guestBook = (req, res) => {
+  let data = parseData(req.body);
+  data.dateTime = new Date().toLocaleString();
+  fs.readFile("./public/json/comments.json", (err, comments) => {
+    handleComments(req, res, comments, data);
+  });
 };
 
 app.use(readBody);
