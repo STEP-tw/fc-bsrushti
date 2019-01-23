@@ -1,5 +1,6 @@
 const App = require("./frameWork");
 const fs = require("fs");
+const comments = require("../public/comments");
 const { sendResponse, parseData } = require("./utility");
 const { formattedComments } = require("./format");
 
@@ -32,39 +33,40 @@ const logRequest = (req, res, next) => {
   next();
 };
 
-const appendToGuestBook = function(req, res, commentLog) {
-  fs.readFile("./public/guestBook.html", (err, content) => {
-    content += commentLog;
-    sendResponse(res, content, 200);
-  });
-};
-
 const storeCommentsToFile = function(comment) {
-  fs.writeFile("./public/json/comments.json", comment, err => {});
+  fs.writeFile("./public/comments.json", comment, err => {});
 };
 
-const handleComments = function(req, res, comments, data) {
-  let parsedComments = JSON.parse(comments);
-  parsedComments.unshift(data);
-  storeCommentsToFile(JSON.stringify(parsedComments));
-  appendToGuestBook(req, res, parsedComments.map(formattedComments).join(""));
+const handleComments = function(req, res) {
+  let data = parseData(req.body);
+  data.dateTime = new Date().toLocaleString();
+  comments.unshift(data);
+  storeCommentsToFile(JSON.stringify(comments));
+  renderGuestBook(req, res);
 };
 
 const home = (req, res) => {
   readFile(req, res);
 };
 
-const guestBook = (req, res) => {
-  let data = parseData(req.body);
-  data.dateTime = new Date().toLocaleString();
-  fs.readFile("./public/json/comments.json", (err, comments) => {
-    handleComments(req, res, comments, data);
+const reloadComments = function(req, res) {
+  let commentLog = comments.map(formattedComments).join("");
+  sendResponse(res, commentLog, 200);
+};
+
+const renderGuestBook = function(req, res) {
+  fs.readFile("./public/guestBook.html", "utf8", (err, content) => {
+    let commentLog = comments.map(formattedComments).join("");
+    let guestBookHTML = content.replace("__COMMENTS__", commentLog);
+    sendResponse(res, guestBookHTML, 200);
   });
 };
 
 app.use(readBody);
 app.use(logRequest);
-app.post("/guestBook.html", guestBook);
+app.get("/guestBook.html", renderGuestBook);
+app.post("/guestBook.html", handleComments);
+app.get("/comments", reloadComments);
 app.use(home);
 
 // Export a function that can act as a handler

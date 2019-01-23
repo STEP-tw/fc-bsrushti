@@ -4,4 +4,8 @@ const wait = function() {
   setTimeout(() => (jar.visibility = "visible"), 1000);
 };
 
-document.getElementById("jar").innerHTML.relo
+const initialize = function() {
+  document.getElementById("jar").onclick = wait;
+};
+
+window.onload = initialize;

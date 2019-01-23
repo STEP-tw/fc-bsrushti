@@ -13,6 +13,20 @@
   text-align: center;
 }
 
+.header {
+  color: orange;
+  text-align: center;
+}
+.submit,
+.refresh {
+  font-size: 20px;
+}
+
+.refresh {
+  border: 1px solid black;
+  cursor: pointer;
+}
+
 #jar {
   margin-left: 70px;
 }
@@ -23,12 +37,4 @@ table {
 
 td {
   padding-top: 12px;
-}
-
-.header {
-  color: orange;
-  text-align: center;
-}
-.submit {
-  font-size: 20px;
 }

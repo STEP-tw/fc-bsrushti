@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Guest Book</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="./css/main.css"
-    />
+    <link rel="stylesheet" href="./css/main.css" type="text/css" />
+    <script src="./js/guestBook.js"></script>
   </head>
   <body>
-    <form action="/guestBook.html" method="POST">
       <header class="guestBook"><a href="./index.html"><<</a>Guest Book</header>
       <section>
+    <form action="/guestBook.html" method="POST">
         <h1>Leave a comment</h1>
         <table>
           <tbody>
@@ -29,9 +25,15 @@
             </tr>
           </tbody>
         </table>
+      </form>
       </section>
-      <div class="comments">DATETIME_NAME_COMMENTS_LIST</div>
+      <div>DATETIME_NAME_COMMENTS_LIST&nbsp;
+        <button id="refresh" class="refresh">&#x21bb</button>
+      </div>
+      <div id="comments">
+        __COMMENTS__
+      </div>
       <hr />
-    </form>
+    
   </body>
 </html>

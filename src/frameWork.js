@@ -23,10 +23,14 @@ class App {
     this.routes.push({ handler });
   }
 
+  get(url, handler) {
+    this.routes.push({ method: "GET", url, handler });
+  }
+
   post(url, handler) {
     this.routes.push({ method: "POST", url, handler });
   }
-  
+
   error(handler) {
     this.errorRoute = handler;
   }

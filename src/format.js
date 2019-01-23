@@ -1,16 +1,25 @@
-const NEW_LINE = "<br>";
-const separator = "<hr>";
+const withTag = (tag, text) => `<${tag}>${text}</${tag}>`;
 
-const formatComment = function(data) {
-  let formattedData = "";
-  formattedData += "Name:" + data.name + NEW_LINE;
-  formattedData += "Comment:" + data.comment + NEW_LINE;
-  formattedData += "DateTime:" + data.dateTime + NEW_LINE;
-  return formattedData + separator;
+const setStyle = (tag, style, text) =>
+  `<${tag} style="${style}">${text}</${tag}>`;
+
+const createTd = text => setStyle("td", "width:30%", text);
+const createRow = text => withTag("tr", text);
+const createTableBody = text => withTag("tbody", text);
+const createTable = text => setStyle("table", "width:50%", text);
+
+const format = function(user) {
+  let tableRow = [
+    createTd(user.name),
+    createTd(user.comment),
+    createTd(user.dateTime)
+  ].join("");
+
+  return createTable(createTableBody(createRow(tableRow)));
 };
 
 const formattedComments = comment => {
-  return formatComment(comment).replace(/\+/g, " ");
+  return format(comment).replace(/\+/g, " ");
 };
 
 module.exports = { formattedComments };
