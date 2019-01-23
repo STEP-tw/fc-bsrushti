@@ -50,8 +50,7 @@ const home = (req, res) => {
 };
 
 const reloadComments = function(req, res) {
-  let commentLog = comments.map(formattedComments).join("");
-  sendResponse(res, commentLog, 200);
+  sendResponse(res, JSON.stringify(comments), 200);
 };
 
 const renderGuestBook = function(req, res) {
