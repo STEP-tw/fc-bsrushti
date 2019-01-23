@@ -6,10 +6,14 @@ const { formattedComments } = require("./format");
 
 const app = new App();
 
+const getURL = url => {
+  if (url == "/") return "./public/index.html";
+  return `./public${url}`;
+};
+
 const readFile = (req, res) => {
-  let fileName = req.url;
-  if (fileName == "/") fileName = "/index.html";
-  fs.readFile("./public" + fileName, function(err, contents) {
+  let fileName = getURL(req.url);
+  fs.readFile(fileName, function(err, contents) {
     if (err) {
       sendResponse(res, "NOT FOUND", 404);
       return;
