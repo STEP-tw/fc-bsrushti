@@ -39,7 +39,7 @@ const storeCommentsToFile = function(comment) {
 
 const handleComments = function(req, res) {
   let data = parseData(req.body);
-  data.dateTime = new Date().toLocaleString();
+  data.dateTime = new Date();
   comments.unshift(data);
   storeCommentsToFile(JSON.stringify(comments));
   renderGuestBook(req, res);

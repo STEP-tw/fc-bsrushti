@@ -12,8 +12,9 @@ const format = function(user) {
   let tableRow = [
     createTd(user.name),
     createTd(user.comment),
-    createTd(user.dateTime)
+    createTd(new Date(user.dateTime).toLocaleString())
   ].join("");
+
   return createRow(tableRow);
 };
 
